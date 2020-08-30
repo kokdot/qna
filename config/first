@@ -1,0 +1,2 @@
+source /home/user/.rvm/scripts/rvm
+rvm gemset use 2.7@qna --create
