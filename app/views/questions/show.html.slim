@@ -1,0 +1,16 @@
+h1= @question.title
+p= @question.body
+.answers
+  ul
+    - @answers.each do |answer|
+      = render 'shared/errors', resource: answer
+      li= answer.body
+      p= link_to 'Destroy', answer, method: :delete, local: true
+
+= form_with model: [@question, @answer], local: true do |f|
+  = f.label :body
+  = f.text_area :body
+  = f.submit 'Add answer'
+.question
+  - if @question.user == current_user
+    p= link_to 'Destroy', @question, method: :delete, local: true
