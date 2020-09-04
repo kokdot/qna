@@ -41,24 +41,22 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  context 'Your answer' do
-    describe 'DELETE #destroy' do
+  describe 'DELETE #destroy' do
+    context 'Your answer' do
       before { login(user) }
       
-      # let!(:question) {create(:question, user: user)}
       it 'deletes the answer' do
         expect{ delete :destroy, params: {id: answer} }.to change(Answer, :count).by(-1)
       end
 
       it 'redirect to question show' do
         delete :destroy, params: {id: answer}
+
         expect(response).to redirect_to question
       end
     end
-  end
 
-  context 'Not your answer' do
-    describe 'DELETE #destroy' do
+    context 'Not your answer' do
       let!(:user_1) { create(:user) }
 
       before { login(user_1) }
@@ -69,6 +67,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 're-render show view' do
         delete :destroy, params: {id: answer}
+        
         expect(response).to redirect_to question
       end
     end

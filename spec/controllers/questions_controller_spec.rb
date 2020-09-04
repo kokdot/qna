@@ -128,8 +128,8 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  context 'Your question' do
-    describe 'DELETE #destroy' do
+  describe 'DELETE #destroy' do
+    context 'Your question' do
       before { login(user) }
       
       let!(:question) {create(:question, user: user)}
@@ -142,10 +142,8 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to redirect_to questions_path
       end
     end
-  end
 
-  context 'Not your question' do
-    describe 'DELETE #destroy' do
+    context 'Not your question' do
       before { login(user) }
 
       let!(:question) {create(:question)}
@@ -155,6 +153,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 're-render show view' do
         delete :destroy, params: {id: question}
+        
         expect(response).to redirect_to question
       end
     end
