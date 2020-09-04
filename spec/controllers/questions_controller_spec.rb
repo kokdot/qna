@@ -65,7 +65,12 @@ RSpec.describe QuestionsController, type: :controller do
       
       it 'save the question in the database' do
         expect{ post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+      end
+
+      it 'question belongs to user' do
+        post :create, params: { question: attributes_for(:question), user: user }
         
+        expect(assigns(:question).user).to eq user
       end
       
       it 'redirect to show view' do
@@ -123,17 +128,35 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'DELETE #destroy' do
-    before { login(user) }
-    
-    let!(:question) {create(:question)}
-    it 'deletes the question' do
-      expect{ delete :destroy, params: {id: question} }.to change(Question, :count).by(-1)
-    end
+  context 'Your question' do
+    describe 'DELETE #destroy' do
+      before { login(user) }
+      
+      let!(:question) {create(:question, user: user)}
+      it 'deletes the question' do
+        expect{ delete :destroy, params: {id: question} }.to change(Question, :count).by(-1)
+      end
 
-    it 'redirect to index' do
-      delete :destroy, params: {id: question}
-      expect(response).to redirect_to questions_path
+      it 'redirect to index' do
+        delete :destroy, params: {id: question}
+        expect(response).to redirect_to questions_path
+      end
+    end
+  end
+
+  context 'Not your question' do
+    describe 'DELETE #destroy' do
+      before { login(user) }
+
+      let!(:question) {create(:question)}
+      it "does'nt delete the question" do
+        expect{ delete :destroy, params: {id: question} }.to_not change(Question, :count)
+      end
+
+      it 're-render show view' do
+        delete :destroy, params: {id: question}
+        expect(response).to redirect_to question
+      end
     end
   end
 end

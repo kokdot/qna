@@ -12,17 +12,37 @@ I'd like to be able to destroy your  answer for question
   given!(:answer) { create(:answer, question: question, user: user) }
   
   describe 'Authenticated user' do
-    background do
-        sign_in(user) 
-        visit questions_path
-        click_on question.body
-    end
-    scenario 'destroy answer for the question' do
+    scenario 'destroy answer for the question by author' do
+      sign_in(user) 
+      visit questions_path
+      click_on question.body
       within('.answers') do 
       click_on 'Destroy'
       end
 
       expect(page).to_not have_content answer.body
+    end
+
+    scenario 'destroy answer for the question by not author' do
+      sign_in(user_1) 
+      visit questions_path
+      click_on question.body
+      within('.answers') do 
+        expect(page).to_not have_content "Destroy"
+      end
+    end
+  end
+
+  describe 'Unauthenticated user' do
+    background do
+        visit questions_path
+        click_on question.body
+    end
+
+    scenario 'destroy answer for the question' do
+      within('.answers') do 
+        expect(page).to_not have_content "Destroy"
+      end
     end
   end
 end

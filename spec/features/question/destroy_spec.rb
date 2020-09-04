@@ -22,6 +22,8 @@ I'd like to be able to destroy your the question
       end
       
       expect(page).to have_content 'Your question successfully destroyed.'
+      expect(page).to_not have_content question.body
+      expect(page).to_not have_content question.title
     end
     
     scenario 'destroy not your question' do
