@@ -3,14 +3,9 @@ class AnswersController < ApplicationController
 
   def create
     @question = Question.find(params[:question_id])
-    @answers = @question.answers
     @answer = @question.answers.new(answer_params)
     @answer.user_id = current_user.id
-    if @answer.save
-      redirect_to @question
-    else
-      render 'questions/show'# , notice: "Body can't be blank"
-    end
+    @answer.save
   end
   
   def destroy

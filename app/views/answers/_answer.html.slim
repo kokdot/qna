@@ -1,0 +1,5 @@
+- if answer.persisted?
+  p= answer.body
+  - if current_user&.author_of?(answer)
+    / p= link_to 'Destroy', "/answers/#{answer.id}", method: :delete, local: true
+    p= link_to 'Destroy', answer, method: :delete, local: true

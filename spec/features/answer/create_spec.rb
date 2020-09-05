@@ -15,14 +15,16 @@ I'd like to be able to add answer for question
         visit questions_path
         click_on question.body
     end
-    scenario 'add answer for the question' do
+    scenario 'add answer for the question', js: true do
       fill_in 'Body', with: 'My answer'
       click_on 'Add answer'
+
       expect(page).to have_content 'My answer'
     end
 
-    scenario 'add answer for the question with error' do
+    scenario 'add answer with error', js: true do
       click_on 'Add answer'
+
       expect(page).to have_content "Body can't be blank"
     end
   end
@@ -36,6 +38,7 @@ I'd like to be able to add answer for question
     scenario 'add answer for the question' do
       fill_in 'Body', with: 'My answer'
       click_on 'Add answer'
+
       expect(page).to have_content 'You need to sign in or sign up before continuing.'
     end
   end
