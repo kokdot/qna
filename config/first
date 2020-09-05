@@ -1,2 +1,4 @@
 source /home/user/.rvm/scripts/rvm
 rvm gemset use 2.7@qna --create
+
+rails db:drop db:create db:migrate RAILS_ENV=test

@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title Qna
+    = csrf_meta_tags
+    = csp_meta_tag
+
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+
+  body
+    p= link_to 'Log Out', destroy_user_session_path, method: :delete, local: true
+    p= link_to 'Log In', new_user_session_path, local: true
+    p.notice = notice
+    p.alert = alert
+    == yield
