@@ -9,6 +9,8 @@ class QuestionsController < ApplicationController
   def show
     @answers = @question.answers
     @answer = Answer.new
+    @number = 0
+    @answers = @answers.order(best: :desc)
   end
   
   def new
@@ -31,8 +33,6 @@ class QuestionsController < ApplicationController
   def update
     if @question.update(question_params)
     redirect_to @question
-    else
-      render :edit
     end
   end
   

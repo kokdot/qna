@@ -11,15 +11,11 @@ I'd like to be able to destroy your the question
   given!(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: user) }
   
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     scenario 'destroy your question' do
       sign_in(user)
       visit questions_path
-      click_on question.body
-
-      within('.question') do 
         click_on 'Destroy'
-      end
       
       expect(page).to have_content 'Your question successfully destroyed.'
       expect(page).to_not have_content question.body
@@ -29,23 +25,16 @@ I'd like to be able to destroy your the question
     scenario 'destroy not your question' do
       sign_in(user_1)
       visit questions_path
-      click_on question.body
 
-      within('.question') do 
-        expect(page).to_not have_content "Destroy"
-      end
+      expect(page).to_not have_content "Destroy"
     end
   end
 
-  describe 'Unauthenticated user' do
+  describe 'Unauthenticated user', js: true do
 
     scenario 'destroy not your question' do
       visit questions_path
-      click_on question.body
-
-      within('.question') do 
-        expect(page).to_not have_content "Destroy"
-      end
+      expect(page).to_not have_content "Destroy"
     end
 
   end

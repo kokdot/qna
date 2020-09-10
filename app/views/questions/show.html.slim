@@ -1,20 +1,17 @@
-h1= @question.title
-p= @question.body
+.question-errors
+  = render 'shared/errors', resource: @question
+
+= render @question
 
 .answers
-  = render @question.answers
-  / - @answers.each do |answer|
-    / - if answer.persisted?
-      p= answer.body
-      - if current_user&.author_of?(answer)
-        / p= link_to 'Destroy', "/answers/#{answer.id}", method: :delete, local: true
-        p= link_to 'Destroy', answer, method: :delete, local: true
+  - @number = 1
+  - @answers.each do |ans|
+    = render ans, object: @number
+
 .answer-errors
   = render 'shared/errors', resource: @answer
-= form_with model: [@question, @answer] do |f|
+
+= form_with model: [@question, @answer], class: 'new-answer' do |f|
   = f.label :body
   = f.text_area :body
   = f.submit 'Add answer'
-.question
-  - if current_user&.author_of?(@question)
-    p= link_to 'Destroy', @question, method: :delete, local: true

@@ -1,5 +1,17 @@
-- if answer.persisted?
-  p= answer.body
-  - if current_user&.author_of?(answer)
-    / p= link_to 'Destroy', "/answers/#{answer.id}", method: :delete, local: true
-    p= link_to 'Destroy', answer, method: :delete, local: true
+/ - number = 1
+div class = "answer-#{answer.id}"
+  - if answer.persisted?
+    div class = "answer#{@number}"
+      p= "Answer #{@number}"
+      - @number += 1
+      p= answer.body
+      - if current_user&.author_of?(answer)
+        p= link_to 'Destroy', answer, method: :delete, local: true
+        p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      - if current_user&.author_of?(answer.question)
+        p= link_to 'The Best', best_answer_path(answer), class: 'best-answer-link', data: { answer_id: answer.id }, remote: true
+
+  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
+    = f.label :body, 'Your answer'
+    = f.text_area :body
+    = f.submit 'Save', class: 'save-answer-link', data: { answer_id: answer.id }
