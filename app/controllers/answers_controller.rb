@@ -5,15 +5,19 @@ class AnswersController < ApplicationController
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
-    @answer.user_id = current_user.id
+    @answer.user = current_user
     @answer.save
     @number = 1
   end
 
   def update
-    @answer.update(answer_params)
-    @question = @answer.question
-    @number = 1
+    if current_user.author_of?(@answer)
+      @answer.update(answer_params)
+      @question = @answer.question
+      @number = 1
+    else
+      redirect_to @answer.question, notice: "Your can't destroy not your answer."
+    end
   end
   
   def destroy
@@ -27,16 +31,9 @@ class AnswersController < ApplicationController
   end
 
   def best
-    @question = @answer.question
-    @answers = Answer.where(question_id: @question)
-    @answers.each do |answer| 
-      answer.best = 'a'
-      answer.save 
-    end
-    @answer.best = 'b'
-    @answer.save
-    @answers = @answers.order(best: :desc)
+    @answers = @answer.best_assign
   end
+  
 
   private
 
