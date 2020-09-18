@@ -96,7 +96,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       context 'unauthenticated user' do
-        
+
         it 'do not change answer attrubutes' do
           patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
           answer.reload
@@ -104,11 +104,11 @@ RSpec.describe AnswersController, type: :controller do
           expect(answer.body).to_not eq 'new body'
         end
 
-        # it 'redirect to question' do
-        #   patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+        it 'redirect to question' do
+          patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
 
-        #   expect(response).to redirect_to question
-        # end
+          expect(response).to have_http_status(401)
+        end
       end
     end
   end
