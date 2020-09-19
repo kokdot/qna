@@ -31,8 +31,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-    redirect_to @question
+    if current_user.author_of?(@question)
+      if @question.update(question_params)
+        redirect_to @question
+      end
+    else
+      redirect_to @question
     end
   end
   

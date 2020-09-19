@@ -1,2 +1,1 @@
-<%= @number = 1 %>
-  $('.answers').html('<%= j render @answers, object: @number %>');
+  $('.answers').html('<%= j render Answer.best_order(@answer.question) %>');

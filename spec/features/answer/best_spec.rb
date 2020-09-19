@@ -20,8 +20,8 @@ feature 'Author can select the best answer', %{
         click_on 'The Best'
       end
 
-      within('.answer1') do
-        expect(page).to have_content answer_1.body
+      within('.answers') do
+        expect(page.all('.answer-body').first).to have_content answer_1.body
       end
     end
 

@@ -31,7 +31,7 @@ class AnswersController < ApplicationController
   end
 
   def best
-    @answers = @answer.best_assign
+    @answer.best_assign 
   end
   
 
