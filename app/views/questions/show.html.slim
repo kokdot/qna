@@ -4,9 +4,8 @@
 = render @question
 
 .answers
-  - @number = 1
   - @answers.each do |ans|
-    = render ans, object: @number
+    = render ans
 
 .answer-errors
   = render 'shared/errors', resource: @answer
