@@ -9,6 +9,7 @@ class QuestionsController < ApplicationController
   def show
     @answers = @question.answers
     @answer = Answer.new
+    @answers = @answers.order(best: :desc)
   end
   
   def new
@@ -29,10 +30,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-    redirect_to @question
+    if current_user.author_of?(@question)
+      if @question.update(question_params)
+        redirect_to @question
+      end
     else
-      render :edit
+      redirect_to @question
     end
   end
   
