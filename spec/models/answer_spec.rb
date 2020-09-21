@@ -15,8 +15,8 @@ RSpec.describe Answer, type: :model do
 
   describe 'Answer best change' do
     let!(:question) { create(:question) }
-    let!(:answer) { create(:answer, question: question) }
-    let!(:answer_1) { create(:answer, question: question) }
+    let!(:answer) { create(:answer, best: false, question: question) }
+    let!(:answer_1) { create(:answer, best: false, question: question) }
     it 'change the best for answer' do
       answer.best_assign
       answer_1.best_assign

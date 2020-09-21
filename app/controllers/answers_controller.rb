@@ -7,14 +7,12 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
     @answer.save
-    @number = 1
   end
 
   def update
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
       @question = @answer.question
-      @number = 1
     else
       redirect_to @answer.question, notice: "Your can't destroy not your answer."
     end
@@ -31,7 +29,9 @@ class AnswersController < ApplicationController
   end
 
   def best
-    @answer.best_assign 
+    if current_user.author_of?(@answer.question)
+      @answer.best_assign 
+    end
   end
   
 

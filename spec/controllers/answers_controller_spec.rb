@@ -146,12 +146,24 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #best' do
-    let!(:answers) {create_list(:answer, 5)}
+    context 'for author' do
+      before { login(user) }
+      it 'assigns the best to answer' do
+        post :best , params: {id: answer}, format: :js
+        answer.reload
 
-    it 'assigns the best to answer' do
-      post :best , params: {id: answer}, format: :js
-      answer.reload
-      expect(answer.best).to_not be_falsey
+        expect(answer.best).to_not be_falsey
+      end
+    end
+    context 'for not author' do
+      let!(:user_1) { create(:user) }
+      before { login(user_1) }
+      it 'assigns the best answer' do
+        post :best , params: {id: answer}, format: :js
+        answer.reload
+
+        expect(answer.best).to be_falsey
+      end
     end
   end
 end
