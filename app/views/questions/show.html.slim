@@ -1,7 +1,15 @@
 .question-errors
   = render 'shared/errors', resource: @question
 
-= render @question
+.question
+  = render @question
+
+  - if @question.files.attached?
+    - @question.files.each do |file|
+      div class = "file-#{file.id}"
+        p= link_to file.filename.to_s, url_for(file)
+        - if current_user&.author_of?(@question)
+            p= link_to 'Remove file', attachment_path(file), method: :delete, remote: true
 
 .answers
   - @answers.each do |ans|
@@ -11,6 +19,11 @@
   = render 'shared/errors', resource: @answer
 
 = form_with model: [@question, @answer], class: 'new-answer' do |f|
-  = f.label :body
-  = f.text_area :body
-  = f.submit 'Add answer'
+  p
+    = f.label :body
+    = f.text_area :body
+  p
+    = f.label :files
+    = f.file_field :files, multiple: true, direct_upload: true
+  p
+    = f.submit 'Add answer'

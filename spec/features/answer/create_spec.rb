@@ -10,6 +10,7 @@ I'd like to be able to add answer for question
   
   describe 'Authenticated user' do
     given!(:user) { create(:user) }
+    given!(:user_1) { create(:user) }
     background do
         sign_in(user) 
         visit questions_path
@@ -20,6 +21,15 @@ I'd like to be able to add answer for question
       click_on 'Add answer'
 
       expect(page).to have_content 'My answer'
+    end
+
+    scenario 'add answer for the question with attached files', js: true do
+      fill_in 'Body', with: 'My answer'
+      attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      click_on 'Add answer'
+    
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
     end
 
     scenario 'add answer with error', js: true do
