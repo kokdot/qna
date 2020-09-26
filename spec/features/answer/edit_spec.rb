@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'User can edit his answer', %{
   In order to correct mistakes
-  As an aurhor of answer
+  As an author of answer
   I's like to able to edit my answer
 } do 
 
@@ -29,6 +29,51 @@ feature 'User can edit his answer', %{
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'edited answer'
         expect(page).to_not have_selector 'textarea'
+      end
+    end
+
+    scenario 'edits his answer with attached files' do
+      sign_in user
+      visit question_path(question)
+      click_on 'Edit'
+      within '.answers' do
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Save'
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+    end
+
+    scenario 'author remove file from answer ', js: true do
+      sign_in user
+      visit question_path(question)
+      click_on 'Edit'
+      # fill_in 'Body', with: 'My answer'
+      within '.answers' do
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb"]
+        click_on 'Save'
+        click_on 'Remove file'
+      end
+    
+      expect(page).to_not have_link 'rails_helper.rb'
+    end
+
+    scenario 'not author remove file from answer ', js: true do
+      sign_in user
+      visit question_path(question)
+      within('.answers') do
+        click_on 'Edit'
+        attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb"]
+        click_on 'Save'
+      end
+        click_on 'Log Out'
+        click_on 'Log In'
+        sign_in(user_1) 
+        visit questions_path
+        click_on question.body
+      within('.answers') do
+        expect(page).to_not have_link 'Remove file'
       end
     end
 

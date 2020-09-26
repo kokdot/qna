@@ -1,6 +1,12 @@
 div class = "answer-#{answer.id}"
   - if answer.persisted?
     p class = 'answer-body'= answer.body
+    - if answer.files.attached?
+      - answer.files.each do |file|
+        div class = "file-#{file.id}"
+          = link_to file.filename.to_s, url_for(file)
+          - if current_user&.author_of?(answer)
+            p= link_to 'Remove file', file_path(file), method: :post, remote: true
     - if current_user&.author_of?(answer)
       p= link_to 'Destroy', answer, method: :delete, local: true
       p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
@@ -8,6 +14,11 @@ div class = "answer-#{answer.id}"
       p= link_to 'The Best', best_answer_path(answer),method: :post, class: 'best-answer-link', data: { answer_id: answer.id }, remote: true
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
-    = f.label :body, 'Your answer'
-    = f.text_area :body
-    = f.submit 'Save', class: 'save-answer-link', data: { answer_id: answer.id }
+    p
+      = f.label :body, 'Your answer'
+      = f.text_area :body
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true
+    p
+      = f.submit 'Save', class: 'save-answer-link', data: { answer_id: answer.id }
