@@ -7,7 +7,6 @@ Rails.application.routes.draw do
       end
     end
   end
+  resources :attachments, only: [:destroy]
   root to: 'questions#index'
-  post 'file/:id', to: 'attachments#delete', as: 'file'
-  
 end

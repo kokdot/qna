@@ -9,15 +9,20 @@ RSpec.describe AttachmentsController, type: :controller do
     before { login(user) }
 
     it 'assign file by id' do
-      post :delete, params: {id: answer.files[0]}, format: :js
+      delete :destroy, params: {id: answer.files[0]}, format: :js
 
       expect(assigns(:file).filename.to_s).to eq 'rails_helper.rb'
     end
 
     it 'delete file' do
-      post :delete, params: {id: answer.files[0]}, format: :js
-      answer.reload
-      expect(answer.files[0]).to be_falsy
+      expect do
+        delete :destroy, params: {id: answer.files[0]}, format: :js
+      end.to change(ActiveStorage::Attachment, :count).by(-1)
+    end
+
+    it 'render view delete' do
+      delete :destroy, params: {id: answer.files[0]}, format: :js
+      expect(response).to render_template :destroy
     end
 
   end
