@@ -1,42 +1,44 @@
 require 'rails_helper'
-feature 'User can add links to question', %q{
-  In order to provide aditional info to my question
-  As an question,s author
+feature 'User can add links to answer', %q{
+  In order to provide aditional info to my answer
+  As an answer,s author
   I,d like to be able to add links
 } do
   given(:user) { create(:user) }
+  given!(:question) { create(:question, user: user) }
   given(:google_url) { 'http://google.com' }
 
-  scenario 'User adds valid link when asks question' do
+  scenario 'User adds link when asks answer', js: true do
     sign_in(user)
-    visit new_question_path
+    visit question_path(question)
 
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'text text text'
+    fill_in 'Body', with: 'My answer'
 
     fill_in 'Name', with: 'My google'
     fill_in 'Url', with: google_url
+    
+    click_on 'Add answer'
 
-    click_on 'Ask'
-
-    expect(page).to have_link 'My google', href: google_url
+    within '.answers' do
+      expect(page).to have_link 'My google', href: google_url
+    end
   end
 
-  scenario 'User adds links when asks question', js: true do
+  scenario 'User adds links when asks answer', js: true do
     sign_in(user)
-    visit new_question_path
+    visit question_path(question)
     click_on 'add link'
 
-    fill_in 'Title', with: 'My question'
-    fill_in 'Body', with: 'Why?'
+    fill_in 'Body', with: 'My answer'
     all('.nested-fields').each do |a|
       within a do
         fill_in 'Name', with: 'My google'
         fill_in 'Url', with: google_url
       end
     end
-    click_on 'Ask'
-    within ".links-show" do
+    click_on 'Add answer'
+
+    within ".answers" do
       all('li').each do |a|
         within a do
           expect(page).to have_link 'My google', href: google_url
@@ -45,17 +47,16 @@ feature 'User can add links to question', %q{
     end
   end
 
-  scenario 'User adds not valid link when asks question' do
+  scenario 'User adds not valid link when asks answer', js: true do
     sign_in(user)
-    visit new_question_path
+    visit question_path(question)
 
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'text text text'
+    fill_in 'Body', with: 'My answer'
 
     fill_in 'Name', with: 'My google'
     fill_in 'Url', with: 'www.google ru'
-
-    click_on 'Ask'
+    
+    click_on 'Add answer'
 
     expect(page).to_not have_link 'My google'
     expect(page).to have_content 'Links url is invalid'

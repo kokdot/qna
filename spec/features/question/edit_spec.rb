@@ -9,7 +9,7 @@ feature 'User can edit his question', %{
   given!(:user) { create(:user) }
   given!(:user_1) { create(:user) }
   given!(:question) { create(:question, user: user) }
-  # given!(:answer) { create(:answer, question: question, user: user) }
+  given(:google_url) { 'http://google.com' }
 
   scenario 'Unauthenticated user can not edit question' do
     visit question_path(question)
@@ -25,7 +25,6 @@ feature 'User can edit his question', %{
       visit question_path(question)
       click_on 'Edit Question'
       within '.edit-question' do
-        # save_and_open_page
         fill_in 'Edit your question', with: 'edited question'
         fill_in 'Edit your title', with: 'edited title'
         click_on 'Save'
@@ -37,7 +36,7 @@ feature 'User can edit his question', %{
       end
     end
 
-    scenario 'edits his question with attached files' do
+    scenario 'edits his question by attach files' do
       sign_in user
       visit question_path(question)
       click_on 'Edit Question'
@@ -48,6 +47,22 @@ feature 'User can edit his question', %{
 
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
+    end
+
+    scenario 'edits his question by attach link' do
+      sign_in user
+      visit question_path(question)
+      click_on 'Edit Question'
+      within '.edit-question' do
+        click_on 'add link'
+        within all('.nested-fields').first do
+          fill_in 'Name', with: 'My google best'
+          fill_in 'Url', with: google_url
+        end
+        click_on 'Save'
+      end
+
+        expect(page).to have_link 'My google best'
     end
 
     scenario 'edits his question with errors' do

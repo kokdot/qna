@@ -12,13 +12,18 @@
     = f.file_field :files, multiple: true
 
   p Links:
-  p
-    = f.fields_for :links do |l|
-      p
-        = l.label :name, 'Link name'
-        = l.text_field :name
-      p
-        = l.label :url
-        = l.text_field :url
+  #tasks
+    = f.fields_for :links do |task|
+      = render 'link_fields', f: task
+    .links
+      = link_to_add_association 'add link ', f, :links
+  / p
+  /   = f.fields_for :links do |l|
+  /     p
+  /       = l.label :name, 'Link name'
+  /       = l.text_field :name
+  /     p
+  /       = l.label :url
+  /       = l.text_field :url
 
   p= f.submit 'Ask'
