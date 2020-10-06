@@ -25,23 +25,20 @@ feature 'User can add links to question', %q{
   scenario 'User adds links when asks question', js: true do
     sign_in(user)
     visit new_question_path
-    click_on 'add link'
-
     fill_in 'Title', with: 'My question'
     fill_in 'Body', with: 'Why?'
+
+    click_on 'add link'
     all('.nested-fields').each do |a|
       within a do
-        fill_in 'Name', with: 'My google'
+        fill_in 'Name', with: 'My google link'
         fill_in 'Url', with: google_url
       end
     end
     click_on 'Ask'
+
     within ".links-show" do
-      all('li').each do |a|
-        within a do
-          expect(page).to have_link 'My google', href: google_url
-        end
-      end
+      expect(page.all('a', text: 'My google link').count).to eq 3
     end
   end
 

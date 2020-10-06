@@ -33,7 +33,7 @@ I'd like to be able to ask the question
       expect(page).to have_content "Title can't be blank"
     end
 
-    scenario 'asks a question with attach files' do
+    scenario 'asks a question with attached files' do
       fill_in 'Title', with: 'Test question'
       fill_in 'Body', with: 'text text text'
       attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
@@ -41,24 +41,6 @@ I'd like to be able to ask the question
 
       expect(page).to have_link 'rails_helper.rb'
       expect(page).to have_link 'spec_helper.rb'
-    end
-    
-    scenario 'asks a question with attach links' , js: true do
-      fill_in 'Title', with: 'Test question'
-      fill_in 'Body', with: 'text text text'
-      
-      click_on 'add link'
-      all('.nested-fields').each do |a|
-        within a do
-          fill_in 'Name', with: "My google best link number"
-          fill_in 'Url', with: google_url
-        end
-      end
-      click_on 'Ask'
-
-      within '.links-show' do
-        expect(page.all('a', text: 'My google best link number').count).to eq 3
-      end
     end
   end
 
