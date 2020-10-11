@@ -13,6 +13,7 @@ RSpec.describe Answer, type: :model do
     it 'assign the best for answer' do
       answer.best_assign
       expect(answer.best).to_not be_falsy
+      expect(answer.reward).to eq answer.question.reward
     end
   end
 

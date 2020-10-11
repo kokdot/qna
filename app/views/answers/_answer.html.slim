@@ -16,9 +16,12 @@ div class = "answer-#{answer.id}"
       p Links:
       - answer.links.each do |link|
         div class = "link-#{link.id}"
-          p= link_to link.name, link.url
-          - if current_user&.author_of?(answer)
-              p= link_to 'Delete Link', link_path(link), method: :delete, remote: true
+          - if link.url.match(/gist/)
+            script src="#{link.url}"
+          else
+            p= link_to link.name, link.url
+            - if current_user&.author_of?(answer)
+                p= link_to 'Delete Link', link_path(link), method: :delete, remote: true
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
     p

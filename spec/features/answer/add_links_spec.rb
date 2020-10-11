@@ -7,26 +7,14 @@ feature 'User can add links to answer', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question, user: user) }
   given(:google_url) { 'http://google.com' }
+  given(:gist_url) { 'https://gist.github.com/kokdot/c9f487f59bdf339d175365be69fb9100.js' }
 
-  scenario 'User adds link when asks answer', js: true do
+  background do
     sign_in(user)
     visit question_path(question)
-
-    fill_in 'Body', with: 'My answer'
-
-    fill_in 'Name', with: 'My google'
-    fill_in 'Url', with: google_url
-    
-    click_on 'Add answer'
-
-    within '.answers' do
-      expect(page).to have_link 'My google', href: google_url
-    end
   end
 
   scenario 'User adds links when asks answer', js: true do
-    sign_in(user)
-    visit question_path(question)
     click_on 'add link'
 
     fill_in 'Body', with: 'My answer'
@@ -48,11 +36,7 @@ feature 'User can add links to answer', %q{
   end
 
   scenario 'User adds not valid link when asks answer', js: true do
-    sign_in(user)
-    visit question_path(question)
-
     fill_in 'Body', with: 'My answer'
-
     fill_in 'Name', with: 'My google'
     fill_in 'Url', with: 'www.google ru'
     
@@ -60,5 +44,16 @@ feature 'User can add links to answer', %q{
 
     expect(page).to_not have_link 'My google'
     expect(page).to have_content 'Links url is invalid'
+  end
+
+  scenario 'User add link to gist',js: true do
+    fill_in 'Body', with: 'My answer'
+    fill_in 'Name', with: 'My gist'
+    fill_in 'Url', with: gist_url
+    
+    click_on 'Add answer'
+    page.evaluate_script 'window.location.reload()'
+
+    expect(page).to have_content 'Hello World!'
   end
 end
