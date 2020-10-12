@@ -10,6 +10,19 @@
         p= link_to file.filename.to_s, url_for(file)
         - if current_user&.author_of?(@question)
             p= link_to 'Remove file', attachment_path(file), method: :delete, remote: true
+  .links-show
+    p Links:
+    - @question.links.each do |link|
+      div class = "link-#{link.id}"
+        p= link_to link.name, link.url
+        - if current_user&.author_of?(@question)
+            p= link_to 'Delete Link', link_path(link), method: :delete, remote: true
+  - if current_user&.author_of?(@question)
+    .reward
+      p Reward:
+      - if @question.reward
+        p= @question.reward.name
+        p= link_to @question.reward.file.filename.to_s, url_for(@question.reward.file)
 
 .answers
   - @answers.each do |ans|
@@ -25,5 +38,10 @@
   p
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true
-  p
-    = f.submit 'Add answer'
+  
+  #tasks
+    = f.fields_for :links do |task|
+      = render 'link_fields', f: task
+    .links
+      = link_to_add_association 'add link ', f, :links
+  p= f.submit 'Add answer'

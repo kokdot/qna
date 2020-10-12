@@ -21,5 +21,4 @@ feature 'User can sign up', %q{
     click_on 'Sign up'
     expect(page).to have_content "Email can't be blank"
   end
-
 end

@@ -10,6 +10,7 @@ feature 'User can edit his answer', %{
   given!(:user_1) { create(:user) }
   given!(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: user) }
+  given(:google_url) { 'http://google.com' }
 
   scenario 'Unauthenticated user can not edit answer' do
     visit question_path(question)
@@ -43,6 +44,22 @@ feature 'User can edit his answer', %{
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
       end
+    end
+
+    scenario 'edits his answer by attach link' do
+      sign_in user
+      visit question_path(question)
+      click_on 'Edit'
+      within '.answers' do
+        click_on 'add link'
+        within all('.nested-fields').first do
+          fill_in 'Name', with: 'My google best'
+          fill_in 'Url', with: google_url
+        end
+        click_on 'Save'
+      end
+
+        expect(page).to have_link 'My google best'
     end
 
     scenario 'author remove file from answer ', js: true do

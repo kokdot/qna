@@ -11,6 +11,7 @@ I'd like to be able to add answer for question
   describe 'Authenticated user' do
     given!(:user) { create(:user) }
     given!(:user_1) { create(:user) }
+    given(:google_url) { 'http://google.com' }
     background do
         sign_in(user) 
         visit questions_path
@@ -30,6 +31,22 @@ I'd like to be able to add answer for question
     
       expect(page).to have_link 'rails_helper.rb'
       expect(page).to have_link 'spec_helper.rb'
+    end
+
+    scenario 'add answer for the question with attached links', js: true do
+      fill_in 'Body', with: 'My answer'
+      click_on 'add link'
+      all('.nested-fields').each do |a|
+        within a do
+          fill_in 'Name', with: "My google best link number"
+          fill_in 'Url', with: google_url
+        end
+      end
+      click_on 'Add answer'
+
+      within '.answers' do
+        expect(page.all('a', text: 'My google best link number').count).to eq 3
+      end
     end
 
     scenario 'add answer with error', js: true do

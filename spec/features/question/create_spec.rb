@@ -7,6 +7,7 @@ I'd like to be able to ask the question
 } do
 
   given(:user) { create(:user) }
+  given(:google_url) { 'http://google.com' }
 
   describe 'Authenticated user' do
 

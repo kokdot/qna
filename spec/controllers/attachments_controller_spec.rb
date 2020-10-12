@@ -24,6 +24,5 @@ RSpec.describe AttachmentsController, type: :controller do
       delete :destroy, params: {id: answer.files[0]}, format: :js
       expect(response).to render_template :destroy
     end
-
   end
 end
