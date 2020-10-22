@@ -17,7 +17,7 @@ I'd like to be able to destroy your  answer for question
       visit questions_path
       click_on question.body
       within('.answers') do 
-      click_on 'Destroy'
+        click_on 'Destroy'
       end
 
       expect(page).to_not have_content answer.body

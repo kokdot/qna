@@ -3,6 +3,7 @@ class Answer < ApplicationRecord
   belongs_to :user
   
   has_many :links, dependent: :destroy, as: :linkable
+  has_many :votes, dependent: :destroy, as: :votable
   has_many_attached :files
   has_one :reward
 
@@ -11,6 +12,7 @@ class Answer < ApplicationRecord
   validates :body, presence: true
 
   scope :best_order, ->(question) { where(question_id: question).order(best: :desc) }
+  scope :rating, ->(answer) { Vote.where(votable_id: answer).inject (0) { |sum, vote| sum + vote.votes} }
   
   def best_assign
     Answer.transaction do

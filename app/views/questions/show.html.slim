@@ -3,13 +3,11 @@
 
 .question
   = render @question
-
-  - if @question.files.attached?
-    - @question.files.each do |file|
-      div class = "file-#{file.id}"
-        p= link_to file.filename.to_s, url_for(file)
-        - if current_user&.author_of?(@question)
-            p= link_to 'Remove file', attachment_path(file), method: :delete, remote: true
+  - @question.files.each do |file|
+    div class = "file-#{file.id}"
+      p= link_to file.filename.to_s, url_for(file)
+      - if current_user&.author_of?(@question)
+          p= link_to 'Remove file', attachment_path(file), method: :delete, remote: true
   .links-show
     p Links:
     - @question.links.each do |link|
@@ -23,6 +21,14 @@
       - if @question.reward
         p= @question.reward.name
         p= link_to @question.reward.file.filename.to_s, url_for(@question.reward.file)
+  
+  .question_vote
+    p class = "rating"
+      = "Rating: #{Question.rating(@question)}"
+    p class = 'rating-error'
+    p= link_to 'vote_up', votes_up_url(id: @question.id, type: 'question'), method: :post, remote: true, class: 'new-vote', data: { type: :json }
+    p= link_to 'vote_down', votes_down_url(id: @question.id, type: 'question'), method: :post, remote: true, class: 'new-vote', data: { type: :json }
+    p= link_to 'vote_cancel', votes_cancel_url(id: @question.id, type: 'question'), method: :post, remote: true, class: 'cancel-vote', data: { type: :json }
 
 .answers
   - @answers.each do |ans|
