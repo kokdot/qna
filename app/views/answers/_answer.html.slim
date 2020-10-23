@@ -24,7 +24,7 @@ div class = "answer-#{answer.id}"
                 p= link_to 'Delete Link', link_path(link), method: :delete, remote: true
     .answer_vote
       p class = "rating"
-        = "Rating: #{ @answer.rating(current_user) }"
+        = "Rating: #{ answer.rating() }"
       p class = 'rating-error'
       p= link_to 'vote_up', votes_up_url(id: answer.id, type: 'answer'), method: :post, remote: true, class: 'new-vote', data: { type: :json }, data: { answer_id: answer.id }
       p= link_to 'vote_down', votes_down_url(id: answer.id, type: 'answer'), method: :post, remote: true, class: 'new-vote', data: { type: :json }, data: { answer_id: answer.id }

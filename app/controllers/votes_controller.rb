@@ -9,7 +9,7 @@ class VotesController < ApplicationController
       else
         @vote = @votable.votes.new(value: 1, user: current_user)
         if @vote.save
-          format.json { render json: { sum: @votable.rating(current_user) } }
+          format.json { render json: { sum: @votable.rating() } }
         else
           format.json { render json: { mes: 'You already vote or this is yours' }, status: :unprocessable_entity }
         end
@@ -24,7 +24,7 @@ class VotesController < ApplicationController
       else
         @vote = @votable.votes.new(value: -1, user: current_user)
         if @vote.save
-          format.json { render json: { sum: @votable.rating(current_user) } }
+          format.json { render json: { sum: @votable.rating() } }
         else
           format.json { render json: { mes: 'You already vote or this is yours' }, status: :unprocessable_entity }
         end
@@ -36,7 +36,7 @@ class VotesController < ApplicationController
     respond_to do |format|
       if @vote
         @vote.destroy
-        format.json { render json: { sum: @votable.rating(current_user) } }
+        format.json { render json: { sum: @votable.rating() } }
       else
         format.json { render json: { nothing: true }, status: :unprocessable_entity }
       end
