@@ -10,7 +10,7 @@ I'd like to be able to vote
   given(:question) { create(:question) }
   given(:question_1) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question) }
-  given!(:answer_1) { create(:answer, user: user) }
+  given!(:answer_1) { create(:answer, question: question_1, user: user) }
 
   background do
     sign_in(user)
@@ -60,7 +60,6 @@ I'd like to be able to vote
 
   describe "answer" do
     scenario 'User vote up' , js: true do
-      save_and_open_page
       within(".answer-#{answer.id}") do
         click_on 'vote_up'
         expect(page).to have_content '1'
@@ -118,5 +117,4 @@ I'd like to be able to vote
       end
     end
   end
-  
 end
