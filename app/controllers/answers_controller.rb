@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_answer, only: [:update, :destroy, :best]
+  after_action :publish_answer, only: [:create]
 
   def create
     @question = Question.find(params[:question_id])
@@ -36,6 +37,28 @@ class AnswersController < ApplicationController
   
 
   private
+
+  def publish_answer
+    return if @answer.errors.any?
+    gon.question_id = @answer.question_id
+    gon.user_id = current_user.id
+    gon.question_owner_id = @answer.question.user_id
+    @files = []
+    @answer.files.each do |file|
+      @files << {name: file.filename.to_s, url: url_for(file), id: file.id}
+
+    end
+    ActionCable.server.broadcast(
+      "question_#{@question.id}",
+      {
+        type: 'answer',
+        answer: @answer,
+        files: @files,
+        links: @answer.links,
+        rating: @answer.rating()
+      }
+    )
+  end
   
   def load_answer
     @answer = Answer.find(params[:id])

@@ -1,0 +1,38 @@
+<div id="answer-{{answer.id}}">
+  <div class="answer-body"><p>{{answer.body}}</p></div>
+  {{#if is_file_attached}}
+    {{#each files}}
+      <div class="file-{{this.id}}">
+        <a href="{{this.url}}">{{this.name}}</a>
+        {{#if ../is_answer_owner}}
+          <a href="/attachments/{{this.id}} data-remote="true" data-method="delete" rel="nofollow"" >Remove file</a>
+        {{/if}}
+      </div>
+    {{/each}}
+  {{/if}}
+  {{#if is_answer_owner}}
+    <a local="true" rel="nofollow" data-method="delete" href="/answers/{{answer.id}}">Destroy</a>
+    <a class="edit-answer-link" data-answer-id="{{answer.id}}" href="#">Edit</a>
+  {{/if}}
+  {{#if is_question_owner}}
+    <a class="best-answer-link" data-answer-id="{{answer.id}}" data-remote="true" rel="nofollow" data-method="post" href="/answers/{{answer.id}}/best">The Best</a>
+  {{/if}}
+  <div class="links-show">
+    {{#if is_link_attached}}
+      {{#each links}}
+      <p><a href="{{this.url}}">{{this.name}}</a></p>
+        {{#if ../is_answer_owner}}
+          <a data-remote="true" rel="nofollow" data-method="delete" href="/links/{{this.id}}">Delete Link</a>
+        {{/if}}
+      {{/each}}
+    {{/if}}
+  </div>
+  <div class="answer_vote">
+    <p class="rating">Rating: {{rating}}</p>
+    {{#if is_not_answer_owner}}
+      <p><a class="new-vote" data-answer-id="{{answer.id}}" data-remote="true" rel="nofollow" data-method="post" href="http://localhost:3000/votes/votes_up?id={{answer.id}}&amp;type=answer">vote_up</a></p>
+      <p></p><a class="new-vote" data-answer-id="{{answer.id}}" data-remote="true" rel="nofollow" data-method="post" href="http://localhost:3000/votes/votes_down?id={{answer.id}}&amp;type=answer">vote_down</a></p>
+      <p></p><a class="cancel-vote" data-answer-id="{{answer.id}}" data-remote="true" rel="nofollow" data-method="post" href="http://localhost:3000/votes/votes_cancel?id={{answer.id}}&amp;type=answer">vote_cancel</a></p>
+    {{/if}}
+  </div>
+</div>

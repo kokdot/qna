@@ -23,12 +23,16 @@ feature 'User can edit his answer', %{
       sign_in user
       visit question_path(question)
       click_on 'Edit'
-      within '.answers' do
+      within ".answer-#{answer.id}" do
         fill_in 'Your answer', with: 'edited answer'
         click_on 'Save'
-
+      end
+      
+      within ".answer-#{answer.id} .answer-body" do
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'edited answer'
+      end
+        within ".answer-#{answer.id} .answer-edit-form" do
         expect(page).to_not have_selector 'textarea'
       end
     end

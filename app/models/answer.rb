@@ -1,8 +1,10 @@
 class Answer < ApplicationRecord
+  include HasVote
+
   belongs_to :question
   belongs_to :user
-  
   has_many :links, dependent: :destroy, as: :linkable
+  has_many :comments, dependent: :destroy, as: :commentable
   has_many_attached :files
   has_one :reward
 

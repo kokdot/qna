@@ -1,12 +1,13 @@
 div class = "answer-#{answer.id}"
   - if answer.persisted?
-    p class = 'answer-body'= answer.body
-    - if answer.files.attached?
-      - answer.files.each do |file|
-        div class = "file-#{file.id}"
-          = link_to file.filename.to_s, url_for(file)
-          - if current_user&.author_of?(answer)
-            p= link_to 'Remove file', attachment_path(file), method: :delete, remote: true
+    div class = 'answer-body'
+      p= answer.body
+      - if answer.files.attached?
+        - answer.files.each do |file|
+          div class = "file-#{file.id}"
+            = link_to file.filename.to_s, url_for(file)
+            - if current_user&.author_of?(answer)
+              = link_to ' Remove file', attachment_path(file), method: :delete, remote: true
     - if current_user&.author_of?(answer)
       p= link_to 'Destroy', answer, method: :delete, local: true
       p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
@@ -22,19 +23,40 @@ div class = "answer-#{answer.id}"
             p= link_to link.name, link.url
             - if current_user&.author_of?(answer)
                 p= link_to 'Delete Link', link_path(link), method: :delete, remote: true
+    .answer_vote
+      p class = "rating"
+        = "Rating: #{ answer.rating() }"
+      p class = 'rating-error'
+      p= link_to 'vote_up', votes_up_url(id: answer.id, type: 'answer'), method: :post, remote: true, class: 'new-vote', data: { type: :json }, data: { answer_id: answer.id }
+      p= link_to 'vote_down', votes_down_url(id: answer.id, type: 'answer'), method: :post, remote: true, class: 'new-vote', data: { type: :json }, data: { answer_id: answer.id }
+      p= link_to 'vote_cancel', votes_cancel_url(id: answer.id, type: 'answer'), method: :post, remote: true, class: 'cancel-vote', data: { type: :json }, data: { answer_id: answer.id }
 
-  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
-    p
-      = f.label :body, 'Your answer'
-      = f.text_area :body
-    p
-      = f.label :files
-      = f.file_field :files, multiple: true
-    #tasks
-      = f.fields_for :links do |task|
-        = render 'link_fields', f: task
-      .links
-        = link_to_add_association 'add link ', f, :links
-    p
-      = f.submit 'Save', class: 'save-answer-link', data: { answer_id: answer.id }
+  .answer-edit-form
+    = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
+      p
+        = f.label :body, 'Your answer'
+        = f.text_area :body
+      p
+        = f.label :files
+        = f.file_field :files, multiple: true
+      #tasks
+        = f.fields_for :links do |task|
+          = render 'link_fields', f: task
+        .links
+          = link_to_add_association 'add link ', f, :links
+      p
+        = f.submit 'Save', class: 'save-answer-link', data: { answer_id: answer.id }
       
+  .answer-comments
+    h3 ="Comments for answer: "
+    -answer.comments.each do |comment|
+      p= comment.body
+  .answer-comments-error
+  - if current_user
+    .answer-comments-form
+      = form_with model: @comment, url: comments_url(resource_id: answer, resource: 'Answer') do |fc|
+        p class = 'comment_body'
+          = fc.label :body, 'Add your comments for answer'
+          = fc.text_area :body
+        p= fc.submit 'Add comment'
+hr
