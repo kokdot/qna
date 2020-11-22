@@ -30,10 +30,25 @@
     p= link_to 'vote_down', votes_down_url(id: @question.id, type: 'question'), method: :post, remote: true, class: 'new-vote', data: { type: :json }
     p= link_to 'vote_cancel', votes_cancel_url(id: @question.id, type: 'question'), method: :post, remote: true, class: 'cancel-vote', data: { type: :json }
 
+  .question-comments
+    h3= "Comments for question: "
+    -@question.comments.each do |comment|
+      p= comment.body
+  .question-comments-error
+  - if current_user
+    .question-comments-form
+      = form_with model: @comment, url: comments_url(resource_id: @question, resource: 'Question') do |f|
+        p class = 'comment_body'
+          = f.label :body, 'Add your comments for question'
+          = f.text_area :body
+        p= f.submit 'Add comment'
+hr
 .answers
+  h2= "Answers: "
+  hr
   - @answers.each do |ans|
     = render ans
-
+h3= "Add your answer: "
 .answer-errors
   = render 'shared/errors', resource: @answer
 

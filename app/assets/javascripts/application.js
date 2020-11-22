@@ -11,8 +11,15 @@
 // about supported directives.
 //
 //= require rails-ujs
+//= require action_cable
 //= require activestorage
 //= require turbolinks
 //= require jquery3
 //= require cocoon
+//= require handlebars
+//= require_tree ./templates
+//= require_tree ./channels
 //= require_tree .
+
+var App = App || {};
+App.cable = ActionCable.createConsumer();

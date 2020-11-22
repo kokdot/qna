@@ -43,7 +43,7 @@ I'd like to be able to add answer for question
         end
       end
       click_on 'Add answer'
-
+      # save_and_open_page
       within '.answers' do
         expect(page.all('a', text: 'My google best link number').count).to eq 3
       end

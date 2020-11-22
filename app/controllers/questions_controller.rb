@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
+  after_action :publish_question, only: [:create]
 
   def index
     @questions = Question.all
@@ -11,6 +12,7 @@ class QuestionsController < ApplicationController
     @answer = Answer.new
     @vote = Vote.new
     @answer.links.new
+    @comment = @answer.comments.new
     @answers = @answers.order(best: :desc)
   end
   
@@ -56,10 +58,20 @@ class QuestionsController < ApplicationController
   
   def load_question
     @question = Question.with_attached_files.find(params[:id])
+    gon.question_id = @question.id
+    gon.user_id = current_user.id if current_user
+    gon.question_owner_id = @question.user_id
   end
 
   def question_params
     params.require(:question).permit(:title, :body, files: [], links_attributes: [:name, :url, :id, :_destroy],
                                       reward_attributes: [:name, :file])
+  end
+
+  def publish_question
+    return if @question.errors.any?
+    p '111111111111111111111111111111111111111111111'
+    ActionCable.server.broadcast 'questions',
+      { id: @question.id, title: @question.title, body: @question.body }
   end
 end

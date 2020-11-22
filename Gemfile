@@ -41,6 +41,8 @@ gem 'jquery-rails'
 gem 'figaro'
 gem 'aws-sdk-s3'
 gem 'cocoon'
+gem 'gon'
+gem 'handlebars_assets'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
