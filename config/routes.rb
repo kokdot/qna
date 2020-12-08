@@ -1,6 +1,9 @@
  Rails.application.routes.draw do
+  # devise_for :users
   get 'users/show'
-  devise_for :users
+  get '/users/email_get', to: 'users#email_get', as: 'users_email_get'
+  post '/users/email_post', to: 'users#email_post', as: 'users_email_post'
+  devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
   resources :questions do
     resources :answers, shallow: true do
       member do
@@ -16,6 +19,5 @@
   post '/votes/votes_down', to: 'votes#votes_down', as: 'votes_down'
   post '/votes/votes_up', to: 'votes#votes_up', as: 'votes_up'
   post '/votes/votes_cancel', to: 'votes#votes_cancel', as: 'votes_cancel'
-
   mount ActionCable.server => '/cable'
 end

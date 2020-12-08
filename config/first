@@ -2,3 +2,9 @@ source /home/user/.rvm/scripts/rvm
 rvm gemset use 2.7@qna --create
 
 rails db:drop db:create db:migrate RAILS_ENV=test
+
+rendered_string = ApplicationController.render(
+  template: 'users/show',
+  assigns: { user: @user }
+)
+https://sourcey.com/articles/rails-omniauth-using-devise-with-twitter-facebook-and-linkedin

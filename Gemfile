@@ -43,12 +43,18 @@ gem 'aws-sdk-s3'
 gem 'cocoon'
 gem 'gon'
 gem 'handlebars_assets'
+gem 'omniauth'
+gem 'omniauth-github'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter', :github => 'arunagw/omniauth-twitter'
+gem 'capybara-email'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails'
   gem 'factory_bot_rails'
+  gem 'letter_opener'
 end
 
 group :development do
