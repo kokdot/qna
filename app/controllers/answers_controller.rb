@@ -46,7 +46,6 @@ class AnswersController < ApplicationController
     @files = []
     @answer.files.each do |file|
       @files << {name: file.filename.to_s, url: url_for(file), id: file.id}
-
     end
     ActionCable.server.broadcast(
       "question_#{@question.id}",

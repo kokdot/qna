@@ -70,7 +70,6 @@ class QuestionsController < ApplicationController
 
   def publish_question
     return if @question.errors.any?
-    p '111111111111111111111111111111111111111111111'
     ActionCable.server.broadcast 'questions',
       { id: @question.id, title: @question.title, body: @question.body }
   end
