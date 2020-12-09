@@ -12,7 +12,7 @@ class Services::FindForOauth
     email = auth.info[:email]
     user = User.find_by(email: email) if email
     if user
-      user.create_authorization(auth)
+      create_authorization(user, auth)
     elsif email 
       password = Devise.friendly_token[0, 20]
       user = User.new(
@@ -22,12 +22,12 @@ class Services::FindForOauth
         password_confirmation: password
       )
       user.save!
-      user.create_authorization(auth)
+      create_authorization(user, auth)
     end
     user
   end
 
-  def create_authorization(auth)
-    self.authorizations.create(provider: auth.provider, uid: auth.uid) 
+  def create_authorization(user, auth)
+    user.authorizations.create(provider: auth.provider, uid: auth.uid) 
   end
 end
