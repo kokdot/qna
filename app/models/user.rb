@@ -1,6 +1,4 @@
 class User < ApplicationRecord
-  TEMP_EMAIL_REGEX = /\Achange@me/
-
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -27,9 +25,4 @@ class User < ApplicationRecord
   def create_authorization(auth)
     self.authorizations.create(provider: auth.provider, uid: auth.uid) 
   end
-
-  def email_verified?
-    self.email && self.email !~ TEMP_EMAIL_REGEX
-  end
-  
 end

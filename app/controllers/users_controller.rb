@@ -17,6 +17,7 @@ class UsersController < ApplicationController
     )
     auth = session[:auth]
     @user.authorizations.create(provider: auth['provider'], uid: auth['uid']) 
+    session[:auth] = nil
     bypass_sign_in(@user)
   end
 
