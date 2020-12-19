@@ -2,6 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_answer, only: [:update, :destroy, :best]
   after_action :publish_answer, only: [:create]
+  authorize_resource
 
   def create
     @question = Question.find(params[:question_id])

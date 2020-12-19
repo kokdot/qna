@@ -1,6 +1,7 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
   after_action :publish_comment, only: [:create]
+  authorize_resource
   def create
     return unless ['Question', 'Answer'].include?(params[:resource])
     @resource = params[:resource].constantize.find(params[:resource_id])

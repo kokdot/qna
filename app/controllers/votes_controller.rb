@@ -1,6 +1,7 @@
 class VotesController < ApplicationController
   before_action :authenticate_user!
   before_action :load_votable
+  authorize_resource
 
   def votes_up
     respond_to do |format|
