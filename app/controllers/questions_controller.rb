@@ -37,22 +37,14 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    # if current_user.author_of?(@question)
-      if @question.update(question_params)
-        redirect_to @question
-      end
-    # else
-      # redirect_to @question
-    # end
+		if @question.update(question_params)
+			redirect_to @question
+		end
   end
   
   def destroy
-    # if current_user.author_of?(@question)
-      @question.destroy
-      redirect_to questions_path, notice: 'Your question successfully destroyed.'
-    # else
-      # redirect_to @question, notice: "Your can't destroy not your question."
-    # end
+    @question.destroy
+    redirect_to questions_path, notice: 'Your question successfully destroyed.'
   end
   
   private

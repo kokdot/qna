@@ -1,12 +1,10 @@
 class VotesController < ApplicationController
   before_action :authenticate_user!
   before_action :load_votable
-  # authorize_resource
 
   def votes_up
     respond_to do |format|
-      if @vote || !(can? :votes_up, @votable)
-      # if @vote || current_user.author_of?(@votable)
+      if @vote || (cannot? :votes_up, @votable)
         format.json { render json: { mes: 'You already vote or this is yours' }, status: :unprocessable_entity }
       else
         @vote = @votable.votes.new(value: 1, user: current_user)
@@ -21,8 +19,7 @@ class VotesController < ApplicationController
 
   def votes_down
     respond_to do |format|
-      if @vote || !(can? :votes_up, @votable)
-      # if @vote || current_user.author_of?(@votable)
+      if @vote || (cannot? :votes_up, @votable)
         format.json { render json: { mes: 'You already vote or this is yours' }, status: :unprocessable_entity }
       else
         @vote = @votable.votes.new(value: -1, user: current_user)

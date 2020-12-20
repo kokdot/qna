@@ -12,28 +12,18 @@ class AnswersController < ApplicationController
   end
 
   def update
-    # if current_user.author_of?(@answer)
-      @answer.update(answer_params)
-      @question = @answer.question
-    # else
-      # redirect_to @answer.question, notice: "Your can't destroy not your answer."
-    # end
+    @answer.update(answer_params)
+    @question = @answer.question
   end
   
   def destroy
     @question = @answer.question
-    # if current_user.author_of?(@answer)
-      @answer.destroy
-      redirect_to @question, notice: 'Your answer successfully destroyed.'
-    # else
-      # redirect_to @question, notice: "Your can't destroy not your answer."
-    # end
+    @answer.destroy
+    redirect_to @question, notice: 'Your answer successfully destroyed.'
   end
 
   def best
-    # if current_user.author_of?(@answer.question)
-      @answer.best_assign 
-    # end
+    @answer.best_assign 
   end
   
 

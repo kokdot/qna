@@ -6,13 +6,13 @@ div class = "answer-#{answer.id}"
         - answer.files.each do |file|
           div class = "file-#{file.id}"
             = link_to file.filename.to_s, url_for(file)
-            - if current_user && (can? :destroy, file)
+            - if can? :destroy, file
               = link_to ' Remove file', attachment_path(file), method: :delete, remote: true
-    - if current_user && (can? :destroy, answer)
+    - if can? :destroy, answer
       p= link_to 'Destroy', answer, method: :delete, local: true
-    - if current_user && (can? :edit, answer)
+    - if can? :edit, answer
       p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-    - if current_user && (can? :best, answer)
+    - if can? :best, answer
       p= link_to 'The Best', best_answer_path(answer),method: :post, class: 'best-answer-link', data: { answer_id: answer.id }, remote: true
     .links-show
       p Links:
@@ -22,7 +22,7 @@ div class = "answer-#{answer.id}"
             script src="#{link.url}"
           else
             p= link_to link.name, link.url
-            - if current_user && (can? :destroy, link)
+            - if can? :destroy, link
                 p= link_to 'Delete Link', link_path(link), method: :delete, remote: true
     .answer_vote
       p class = "rating"
