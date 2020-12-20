@@ -49,9 +49,9 @@ describe Ability do
     it { should_not be_able_to :update, create(:comment, commentable: question, user: other), user:user }
     it { should be_able_to :best, create(:answer, question: question_1) }
     it { should be_able_to :destroy, create(:link, linkable: question_1) }
-    it { should be_able_to :votes_up, create(:vote, votable: question_1) }
-    it { should be_able_to :votes_down, create(:vote, votable: question_1) }
-    it { should be_able_to :votes_cancel, create(:vote, votable: question_1) }
+
+    it { should be_able_to :votes_up, question }
+    it { should be_able_to :votes_down, question }
     it { should be_able_to :destroy, ActiveStorage::Attachment, record: { user: user } }
   end
 end

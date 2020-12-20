@@ -19,7 +19,6 @@ I'd like to be able to delete links of answer
   
   context 'for author' do
     scenario 'delete link of answer', js: true do
-      # save_and_open_page
       within '.answers' do
         click_on 'Delete Link'
       end

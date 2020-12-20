@@ -4,8 +4,8 @@ class AttachmentsController < ApplicationController
   def destroy
     authorize! :destroy, ActiveStorage::Attachment
     @file = ActiveStorage::Attachment.find(params[:id])
-    if current_user.author_of?(@file.record)
+    # if current_user.author_of?(@file.record)
       @file.purge
-    end
+    # end
   end
 end

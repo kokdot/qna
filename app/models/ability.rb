@@ -13,10 +13,10 @@ class Ability
         can :update, [Question, Answer, Comment], user: user
         can :destroy, [Question, Answer, Comment], user: user
         can :best, Answer, question: { user: user }
-        can :destroy, Link, linkable: { user: user }
-        can :votes_up, Vote
-        can :votes_down, Vote
-        can :votes_cancel, Vote
+        can :manage, Link, linkable: { user: user }
+        can [:votes_up, :votes_down], [Answer, Question] do |votable|
+          votable.user_id != user.id
+        end
         can :destroy, ActiveStorage::Attachment, record: { user: user }
       end
     else
