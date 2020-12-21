@@ -9,20 +9,6 @@ RSpec.describe User, type: :model do
   it { should have_many(:votes).dependent(:destroy) }
   it { should have_many(:votes).dependent(:destroy) }
 
-  describe 'User author_of?' do
-    let(:user) {create(:user) }
-    let(:user_1) {create(:user) }
-    let(:question) { create(:question, user:user) }
-
-    it 'return true if user is author of qestion' do
-      expect(user).to be_author_of(question)
-    end
-
-    it 'return false if user is not author of qestion' do
-      expect(user_1).to_not be_author_of(question)
-    end
-  end
-
   describe '.find_for_oauth' do
     let!(:user) { create(:user) }
     let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456') }
@@ -33,8 +19,5 @@ RSpec.describe User, type: :model do
       expect(service).to  receive(:call)
       User.find_for_oauth(auth)
     end
-    
-    
-    
   end
 end

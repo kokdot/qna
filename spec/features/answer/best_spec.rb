@@ -19,7 +19,6 @@ feature 'Author can select the best answer', %{
       within(".answer-#{answer_1.id}") do
         click_on 'The Best'
       end
-
       within('.answers') do
         expect(page.all('.answer-body').first).to have_content answer_1.body
       end

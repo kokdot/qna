@@ -91,7 +91,7 @@ RSpec.describe AnswersController, type: :controller do
         it 'redirect to question' do
           patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
 
-          expect(response).to redirect_to question
+          expect(response).to redirect_to root_path
         end
       end
 
@@ -140,7 +140,7 @@ RSpec.describe AnswersController, type: :controller do
       it 're-render show view' do
         delete :destroy, params: {id: answer}, format: :js
         
-        expect(response).to redirect_to question
+        expect(response).to redirect_to root_path
       end
     end
   end

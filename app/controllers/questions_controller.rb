@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
   after_action :publish_question, only: [:create]
+  authorize_resource
 
   def index
     @questions = Question.all
@@ -36,22 +37,14 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(@question)
-      if @question.update(question_params)
-        redirect_to @question
-      end
-    else
-      redirect_to @question
-    end
+		if @question.update(question_params)
+			redirect_to @question
+		end
   end
   
   def destroy
-    if current_user.author_of?(@question)
-      @question.destroy
-      redirect_to questions_path, notice: 'Your question successfully destroyed.'
-    else
-      redirect_to @question, notice: "Your can't destroy not your question."
-    end
+    @question.destroy
+    redirect_to questions_path, notice: 'Your question successfully destroyed.'
   end
   
   private

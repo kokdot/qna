@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :load_user, only: [:show]
+  authorize_resource
   def show
     @rewards = Reward.where(answer_id: @user.answers)
   end

@@ -14,9 +14,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :confirmable,
          :omniauthable, omniauth_providers: [:github, :facebook, :twitter]
 
-  def author_of?(answer)
-    answer.user_id == self.id
-  end
+  # def author_of?(answer)
+  #   answer.user_id == self.id
+  # end
 
   def self.find_for_oauth(auth)
     Services::FindForOauth.new(auth).call
