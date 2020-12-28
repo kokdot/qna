@@ -16,7 +16,9 @@
       resources :profiles, only: [] do
         get :me, on: :collection
       end
-      resources :questions, only: [:index, :show]
+			resources :questions, only: [:index, :show, :create, :update, :destroy] do
+				resources :answers, shallow: true
+			end
       resources :users, only: [:index]
     end
   end

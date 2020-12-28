@@ -1,11 +1,8 @@
 class FileSerializer < ActiveModel::Serializer
-  attributes :name#, :url, :created_at, :updated_at
+	include Rails.application.routes.url_helpers
+  attributes :id, :url
 
-  def name
-    object.filename.to_s
+	def url
+    rails_blob_url(object, only_path: true)
   end
-
-  # def url
-  #   url_for(object)
-  # end
 end

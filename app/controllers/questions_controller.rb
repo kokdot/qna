@@ -61,9 +61,9 @@ class QuestionsController < ApplicationController
                                       reward_attributes: [:name, :file])
   end
 
-  # def publish_question
-  #   return if @question.errors.any?
-  #   ActionCable.server.broadcast 'questions',
-  #     { id: @question.id, title: @question.title, body: @question.body }
-  # end
+  def publish_question
+    return if @question.errors.any?
+    ActionCable.server.broadcast 'questions',
+      { id: @question.id, title: @question.title, body: @question.body }
+  end
 end

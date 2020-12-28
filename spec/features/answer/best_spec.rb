@@ -19,7 +19,10 @@ feature 'Author can select the best answer', %{
       within(".answer-#{answer_1.id}") do
         click_on 'The Best'
       end
-      within('.answers') do
+			within('.answers') do
+				p '*'*50
+				Answer.all.each {|ans| p ans.best, ans.body}
+				save_and_open_page
         expect(page.all('.answer-body').first).to have_content answer_1.body
       end
     end
