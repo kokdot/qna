@@ -88,7 +88,8 @@ describe "Anwers API", type: :request do
 	end
 
 	describe 'PATCH /api/v1/answers/:id' do
-		let(:answer) { create(:answer, :special, user_id: access_token.resource_owner_id) }
+		let(:user) { create(:user) }
+		let(:answer) { create(:answer, :special, user: user) }
 		let(:api_path) { "/api/v1/answers/#{answer.id}" }
 		let(:method) { 'patch' }
 		let(:answer_response) { json['answer'] }
@@ -96,7 +97,7 @@ describe "Anwers API", type: :request do
 		it_behaves_like 'API Authorizable'
 
 		context "authorized" do
-			let(:access_token) { create(:access_token) }
+			let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 			let(:resource_response) { json['answer'] }
 			let(:valid_params) { { body: 'answer body changed' } }
 			let(:invalid_params) { { body: '' } }
@@ -109,7 +110,7 @@ describe "Anwers API", type: :request do
 	describe 'DELETE /api/v1/questions/:id' do
 		context 'unauthorized' do
 			let(:user) {create(:user)}
-			let!(:answer) { create(:answer) }
+			let!(:answer) { create(:answer, user: user) }
 			let(:api_path) { "/api/v1/answers/#{answer.id}" }
 			let(:method) { 'delete' }
 			

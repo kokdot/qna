@@ -98,14 +98,15 @@ describe "Questions API", type: :request do
 	end
 
 	describe 'PATCH /api/v1/questions/:id' do
-		let(:question) { create(:question) }
+		let(:user) { create(:user) }
+		let(:question) { create(:question, user: user) }
 		let(:api_path) { "/api/v1/questions/#{question.id}" }
 		let(:method) { 'patch' }
 		
 		it_behaves_like 'API Authorizable'
 		
 		context "authorized" do
-			let(:access_token) { create(:access_token) }
+			let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 			let(:resource_response) { json['question'] }
 			let(:valid_params) { { title: 'title changed', body: 'question body changed' } }
 			let(:invalid_params) { { title: '', body: '' } }

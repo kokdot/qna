@@ -7,7 +7,7 @@ shared_examples_for 'API Updateable' do
 		end
 
 		it 'save the resource in the database' do
-			expect(resource_response['body']).to eq valid_params['body']
+			expect(resource_response[:body]).to eq valid_params['body']
 		end
 
 		it 'return 200 status' do
