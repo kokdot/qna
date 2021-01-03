@@ -3,8 +3,8 @@ class QuestionSerializer < ActiveModel::Serializer
   has_many :answers, serializer: AnswersSerializer
   has_many :comments
   has_many :links
-	has_many :files, serializer: FileSerializer
-	belongs_to :user
+  has_many :files, serializer: FileSerializer
+  belongs_to :user
   def short_title
     object.title.truncate(7)
   end

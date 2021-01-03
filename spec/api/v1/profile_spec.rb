@@ -42,8 +42,6 @@ describe "Profiles API", type: :request do
         end
       end
     end
-    
   end
-  
 end
 
