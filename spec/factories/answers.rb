@@ -13,9 +13,20 @@ FactoryBot.define do
     trait :invalid do
       body { nil }
     end
+    
+    trait :special do
+      body { 'MyText' }
+    end
+    
+    trait :with_comments do
+      after(:create) do |answer|
+        create_list(:comment, 3, commentable: answer)
+      end
+    end
 
     trait :with_file do
-      files { fixture_file_upload(Rails.root.join('spec', 'rails_helper.rb'), 'text/rb') }
+      files { [fixture_file_upload(Rails.root.join('spec', 'rails_helper.rb'), 'text/rb'), 
+        fixture_file_upload(Rails.root.join('spec', 'spec_helper.rb'), 'text/rb')] }
     end
     
     trait :with_link do
